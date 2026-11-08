@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex">
+<title>Authorization result - Emad Uploader</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:42rem;margin:3rem auto;padding:0 1rem;line-height:1.6;color:#1b1b1f}
+  code{display:block;padding:.75rem;background:#f1f1f4;border-radius:.4rem;word-break:break-all;margin:.75rem 0}
+  button{padding:.5rem 1rem;font-size:1rem;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>Authorization result</h1>
+<div id="out"><p>Waiting for the result&hellip;</p></div>
+<script>
+  // Everything happens in this browser tab. Nothing is sent anywhere.
+  var p = new URLSearchParams(location.search);
+  var out = document.getElementById("out");
+  out.textContent = "";
+  function line(tag, text){ var e = document.createElement(tag); e.textContent = text; out.appendChild(e); return e; }
+  if (p.get("error")) {
+    line("p", "TikTok returned an error: " + p.get("error") + (p.get("error_description") ? " (" + p.get("error_description") + ")" : ""));
+  } else if (p.get("code")) {
+    line("p", "Copy this code and give it to the setup command. Do not share it with anyone else.");
+    var c = line("code", p.get("code"));
+    var b = line("button", "Copy code");
+    b.onclick = function(){ navigator.clipboard.writeText(p.get("code")).then(function(){ b.textContent = "Copied"; }); };
+  } else {
+    line("p", "No authorization result in this address. Start again from the setup command.");
+  }
+</script>
+</body>
+</html>
